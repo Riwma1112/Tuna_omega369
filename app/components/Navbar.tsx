@@ -10,7 +10,7 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="container">
         <Link href="/" className="logo">
-          ROBOTICS WEB
+          TUNA RIWMA
         </Link>
 
         <button
