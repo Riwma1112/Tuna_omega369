@@ -1,9 +1,19 @@
-export default function Profile() {
+import { redirect } from "next/navigation";
+import { getSession } from "@/lib/session";
+
+export default async function Profile() {
+  const user = await getSession();
+
+  if (!user) {
+    redirect("/login");
+  }
+
   return (
-    <div >
-      <h1> Tuna888 </h1>
-      <p> เว็บบิดไม่คืนเงิน </p>
+    <div className="page">
+      <h1>Profile</h1>
+      <p>Name: {user.name as string}</p>
       
+      <p>Role: {user.role as string}</p>
     </div>
   );
 }

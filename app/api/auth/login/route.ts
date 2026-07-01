@@ -2,35 +2,44 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
+import { createSession } from "@/lib/session";
 
 export async function POST(req: Request) {
-  try {
-    const { name, email, password } = await req.json();
+  const { email, password } = await req.json();
 
-    await connectDB();
+  await connectDB();
 
-    const exists = await User.findOne({ email });
-    if (exists) {
-      return NextResponse.json(
-        { message: "Email already exists" },
-        { status: 400 }
-      );
-    }
+  const user = await User.findOne({ email });
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    await User.create({
-      name,
-      email,
-      password: hashedPassword,
-      role: "user",
-    });
-
-    return NextResponse.json({ message: "Register success" });
-  } catch {
+  if (!user) {
     return NextResponse.json(
-      { message: "Register failed" },
-      { status: 500 }
+      { message: "Invalid email or password" },
+      { status: 401 }
     );
   }
+
+  const valid = await bcrypt.compare(password, user.password);
+
+  if (!valid) {
+    return NextResponse.json(
+      { message: "Invalid email or password" },
+      { status: 401 }
+    );
+  }
+
+  await createSession({
+    id: user._id.toString(),
+    name: user.name,
+    email: user.email,
+    role: user.role,
+  });
+
+  return NextResponse.json({
+    message: "Login success",
+    user: {
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    },
+  });
 }
