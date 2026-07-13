@@ -67,11 +67,18 @@ export default function Navbar() {
           )}
 
           {user?.role === "admin" && (
-            <li>
+            <>
+              <li>
               <Link href="/admin/users">Admin</Link>
             </li>
+            <li>
+              <Link href="/admin/categories">Admin</Link>
+            </li>
+            <li>
+              <Link href="/admin/products">Admin</Link>
+            </li>
+            </>
           )}
-
           {!user ? (
             <>
               <li>
