@@ -2,10 +2,10 @@
 
 import { FormEvent, useState } from "react";
 
-export default function CategoryForm() {
-  const [name, setName] = useState("");
+export default function BlogForm() {
+  const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
-  const [description, setDescription] = useState("");
+  const [content, setContent] = useState("");
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -18,7 +18,7 @@ export default function CategoryForm() {
   }
 
   function handleNameChange(value: string) {
-    setName(value);
+    setTitle(value);
     setSlug(createSlug(value));
   }
 
@@ -29,28 +29,28 @@ export default function CategoryForm() {
       setSubmitting(true);
       setMessage("");
 
-      const response = await fetch("/api/categories", {
+      const response = await fetch("/api/blogs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name,
+          title,
           slug,
-          description,
+          content,
         }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message ?? "เพิ่มหมวดหมู่ไม่สำเร็จ");
+        throw new Error(data.message ?? "เพิ่มมูนไม่สำเร็จ");
       }
 
-      setMessage("เพิ่มหมวดหมู่สำเร็จ");
-      setName("");
+      setMessage("เพิ่มมูนสำเร็จ");
+      setTitle("");
       setSlug("");
-      setDescription("");
+      setContent("");
     } catch (error) {
       setMessage(
         error instanceof Error
@@ -76,7 +76,7 @@ export default function CategoryForm() {
 
         <input
           type="text"
-          value={name}
+          value={title}
           onChange={(event) =>
             handleNameChange(event.target.value)
           }
@@ -103,9 +103,9 @@ export default function CategoryForm() {
         </label>
 
         <textarea
-          value={description}
+          value={content}
           onChange={(event) =>
-            setDescription(event.target.value)
+            setContent(event.target.value)
           }
           className="min-h-28 w-full rounded-lg border px-3 py-2"
         />

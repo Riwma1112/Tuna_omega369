@@ -45,7 +45,7 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="container">
         <Link href="/" className="logo">
-          ROBOT SHOP
+          ROBOT SHOP Forever
         </Link>
 
         <button className="menu-btn" onClick={() => setMenuOpen(!menuOpen)}>
@@ -68,6 +68,9 @@ export default function Navbar() {
 
           {user?.role === "admin" && (
             <>
+              <li>
+                <Link href="/admin/blogs">บทประพันธ์</Link>
+              </li>
               <li>
               <Link href="/admin/users">Admin</Link>
             </li>
