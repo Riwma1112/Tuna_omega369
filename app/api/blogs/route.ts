@@ -1,24 +1,23 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
-import Blog from "@/models/Blog"
-import { title } from "process";
+import Blog from "@/models/Blog";
 
 export async function GET() {
   try {
     await connectDB();
 
-    const blogs = await Blog.find()
+    const blog = await Blog.find()
       .sort({ title: 1 })
       .lean();
 
     return NextResponse.json({
-      blogs,
+      blog,
     });
   } catch (error) {
-    console.error("GET error:", error);
+    console.error("GET blog error:", error); // แก้ข้อความ log ให้ตรงกัน
 
     return NextResponse.json(
-      { message: "ไม่สามารถโหลดหมวดหมู่ได้" },
+      { message: "ไม่สามารถโหลดข้อมูลได้" },
       { status: 500 }
     );
   }
@@ -30,13 +29,14 @@ export async function POST(request: Request) {
 
     const body = await request.json();
 
-    const name = String(body.title ?? "").trim();
+    // เปลี่ยนชื่อตัวแปรให้ตรงกับการใช้งานด้านล่าง หรือใช้ title / content ไปเลย
+    const title = String(body.title ?? "").trim();
     const slug = String(body.slug ?? "")
       .trim()
       .toLowerCase();
-    const description = String(body.description ?? "").trim();
+    const content = String(body.content ?? "").trim(); // เปลี่ยนจาก description เป็น content
 
-    if (!name || !slug) {
+    if (!title || !slug) {
       return NextResponse.json(
         { message: "กรุณากรอกชื่อและ slug" },
         { status: 400 }
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
       $or: [{ title }, { slug }],
     });
 
-    if (existingBlog) {
+    if (existingBlog                        ) {
       return NextResponse.json(
         { message: "ชื่อหรือ slug นี้มีอยู่แล้ว" },
         { status: 409 }
@@ -57,21 +57,21 @@ export async function POST(request: Request) {
     const blog = await Blog.create({
       title,
       slug,
-      description,
+      content,
     });
 
     return NextResponse.json(
       {
-        message: "เพิ่มมูนสำเร็จ",
-        Blog,
+        message: "เพิ่มข้อมูลสำเร็จ",
+        blog,
       },
       { status: 201 }
     );
   } catch (error) {
-    console.error("POST Blog error:", error);
+    console.error("POST error:", error);
 
     return NextResponse.json(
-      { message: "ไม่สามารถเพิ่มมูนได้" },
+      { message: "ไม่สามารถเพิ่มข้อมูลได้" },
       { status: 500 }
     );
   }
