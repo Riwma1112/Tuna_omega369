@@ -2,8 +2,9 @@ import mongoose from "mongoose";
 
 const BlogSchema = new mongoose.Schema(
   {
-    name: String,
-    password: String,
+    title: String,
+    slug : String,
+    content: String,
 
   },
   { timestamps: true }
