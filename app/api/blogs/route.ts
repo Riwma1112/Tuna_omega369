@@ -38,7 +38,7 @@ export async function POST(request: Request) {
 
     if (!title || !slug) {
       return NextResponse.json(
-        { message: "กรุณากรอกชื่อและ slug" },
+        { message: "กรุณากรอกหัวเรื่องและ slug" },
         { status: 400 }
       );
     }
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
 
     if (existingBlog                        ) {
       return NextResponse.json(
-        { message: "ชื่อหรือ slug นี้มีอยู่แล้ว" },
+        { message: "หัวเรื่องหรือ slug นี้มีอยู่แล้ว" },
         { status: 409 }
       );
     }

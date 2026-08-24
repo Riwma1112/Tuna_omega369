@@ -5,7 +5,7 @@ import User from "@/models/User";
 
 export async function POST(req: Request) {
   try {
-    const { name, email, password } = await req.json();
+    const { name, email, password , phone } = await req.json();
 
     await connectDB();
 
@@ -24,6 +24,7 @@ export async function POST(req: Request) {
       email,
       password: hashedPassword,
       role: "user",
+      phone,
     });
 
     return NextResponse.json({ message: "Register success" });
