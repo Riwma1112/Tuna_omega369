@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/mongodb";
+/*import { connectDB } from "@/lib/mongodb";
 import Product from "@/models/Product";
 import ProductCard from "@/components/ProductCard";
 
@@ -63,4 +63,4 @@ export default async function ProductsPage() {
       )}
     </main>
   );
-}
+}*/
